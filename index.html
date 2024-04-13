@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice Cream Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            color: #333; /* Dark text for better contrast */
+        }
+
+        header, footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .add-to-cart {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ice Cream Store</h1>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#contact">Contact</a>
+            <a href="#cart">Cart</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <h2>Welcome to Our Ice Cream Store</h2>
+            <p>Discover the best ice cream flavors in town.</p>
+        </section>
+
+        <section id="products">
+            <h2>Our Ice Cream Flavors</h2>
+            <div class="product" data-id="1">
+                <h3>Vanilla Ice Cream</h3>
+                <p>$5.99</p>
+                <p>Creamy vanilla ice cream with a hint of cocoa.</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <!-- Add more products here -->
+        </section>
+
+        <section id="cart">
+            <h2>Your Cart</h2>
+            <div id="cart-items"></div>
+            <button id="checkout">Checkout</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Ice Cream Store. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            const cartItems = document.getElementById('cart-items');
+            const checkoutButton = document.getElementById('checkout');
+            let cart = []; // Initialize an empty cart array
+
+            // Function to add items to the cart
+            function addToCart(productId, productName, productPrice) {
+                cart.push({ id: productId, name: productName, price: productPrice });
+                updateCartDisplay();
+            }
+
+            // Function to update the cart display
+            function updateCartDisplay() {
+                cartItems.innerHTML = ''; // Clear the cart items display
+                let total = 0;
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.textContent = `${item.name} - $${item.price}`;
+                    cartItems.appendChild(cartItem);
+                    total += parseFloat(item.price);
+                });
+                // Display the total price
+                const totalPrice = document.createElement('div');
+                totalPrice.textContent = `Total: $${total.toFixed(2)}`;
+                cartItems.appendChild(totalPrice);
+            }
+
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const product = button.parentElement;
+                    const productId = product.getAttribute('data-id');
+                    const productName = product.querySelector('h3').textContent;
+                    const productPrice = product.querySelector('p:nth-child(2)').textContent;
+
+                    addToCart(productId, productName, productPrice);
+                });
+            });
+
+            checkoutButton.addEventListener('click', () => {
+                // Show the total price in the cart
+                alert(`Total: $${cart.reduce((total, item) => total + parseFloat(item.price), 0).toFixed(2)}`);
+                // Ask the user to choose a payment method
+                const paymentMethod = prompt('Would you like to use a debit or credit card?');
+                if (paymentMethod) {
+                    alert(`Payment method selected: ${paymentMethod}`);
+                    // Implement checkout logic here based on the selected payment method
+                } else {
+                    alert('No payment method selected.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
